@@ -1,7 +1,7 @@
 # CryptoCurrenciesAndCompanies
 SWE Project 2021
 
-<a href="url"><img src="https://github.com/sandeshrjain/CryptoCurrenciesAndCompanies/blob/main/images/index.JPG" align="left" height="700" width="1000" ></a>
+<a href="url"><img src="https://github.com/sandeshrjain/Stock-and-crypto-project/blob/main/images/index.JPG" align="left" height="700" width="1000" ></a>
 
 ## EXECUTIVE SUMMARY
 
@@ -35,4 +35,4 @@ SWE Project 2021
 
 
 
-Link to detailed project report: https://github.com/sandeshrjain/CryptoCurrenciesAndCompanies/blob/main/CS5704%20Team%207%20Semester%20Project%20Report.docx.pdf
+Link to detailed project report: https://github.com/sandeshrjain/Stock-and-crypto-project/blob/main/CS5704%20Team%207%20Semester%20Project%20Report.docx.pdf
