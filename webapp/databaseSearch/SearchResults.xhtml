@@ -1,0 +1,211 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!--
+  - Created by team 7 Sean Gruber, Sandesh Jain, Ryan Wood
+  -->
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+      xmlns:h="http://xmlns.jcp.org/jsf/html"
+      xmlns:f="http://xmlns.jcp.org/jsf/core"
+      xmlns:p="http://primefaces.org/ui"
+      xmlns:c="http://xmlns.jcp.org/jsp/jstl/core">
+
+<!-- Do not enter tags before the composition line since they are ignored by JSF -->
+
+<!-- This page is constructed based on the siteTemplate -->
+<ui:composition template="/template/siteTemplate.xhtml">
+
+    <ui:define name="title">
+        <!-- Set the page title -->
+        <h:outputText value="CryptoCurrencies List" />
+    </ui:define>
+
+    <!-- Create the content for this page below -->
+    <ui:define name="editableContent">
+
+        <!-- In case of JSF validation error, set 'selected' to null in cryptoCurrencyController -->
+        <c:if test="#{facesContext.validationFailed}">
+            ${cryptoCurrencyController.unselect()}
+        </c:if>
+
+        <!-- Set 'selected' to null in cryptoCurrencyController when the user refreshes / reloads this JSF page -->
+        <f:metadata>
+            <f:viewAction action="#{cryptoCurrencyController.unselect()}" rendered="#{facesContext.postback}" />
+        </f:metadata>
+
+        <div align="center">
+            <h:form id="CryptoCurrencyListForm">
+                <p:panel header="List of Top CryptoCurrencies">
+                    <p:dataTable id="datalist"
+                                 value="#{cryptoCurrencyController.searchItems}"
+                                 var="aCrypto"
+                                 widgetVar="cryptocurrenciesDataTable"
+                                 selectionMode="single"
+                                 selection="#{cryptoCurrencyController.selected}"
+                                 reflow="true"
+                                 showGridlines="true"
+                                 paginator="true"
+                                 rowKey="#{aCrypto.id}"
+                                 rows="5"
+                                 rowsPerPageTemplate="5,10,15,20,30,40,50"
+                                 emptyMessage="No CryptoCurrency found for the search query entered!" >
+
+                        <p:ajax event="rowSelect"   update="viewButton sentimentButton backButton"/>
+                        <p:ajax event="rowUnselect" update="viewButton sentimentButton backButton"/>
+
+                        <!--
+                        *************************
+                        *   Data Table Header   *
+                        *************************
+                        -->
+                        <f:facet name="header">
+                            <div align="center">
+                                <p:inputText id="globalFilter" onkeyup="PF('cryptocurrenciesDataTable').filter()" filterMatchMode="contains"
+                                             style="width: 250px"
+                                             placeholder="Enter Global Search Query" />
+                                &nbsp;
+                                <p:commandButton type="button" value="Clear All Filters" styleClass="ui-button-outlined"
+                                                 icon="fas fa-undo" onclick="PF('cryptocurrenciesDataTable').clearFilters()" />
+                            </div>
+                        </f:facet>
+
+                        <!--
+                        ***************************
+                        *   Cryptocurrency NAME   *
+                        ***************************
+                        -->
+                        <p:column headerText="Crypto Name" sortBy="#{aCrypto.name}" filterBy="#{aCrypto.name}" filterMatchMode="contains"
+                                  exportFunction="#{aCrypto.getName()}" style="width: 100px; vertical-align: top" >
+                            <!-- Clicking the currency name in the data table displays the currency's website -->
+                            <a href="#{aCrypto.websiteLink}" target="_blank" style="color:blue">#{aCrypto.name}</a>
+                        </p:column>
+
+                        <!--
+                        *****************************
+                        *   Cryptocurrency Symbol   *
+                        *****************************
+                        CryptoCurrecny Symbol column displays the currencies symbol
+                        -->
+                        <p:column headerText="Symbol" sortBy="#{aCrypto.symbol}" filterBy="#{aCrypto.symbol}" filterMatchMode="contains"
+                                  exportFunction="#{aCrypto.getSymbol()}" style="width: 60px; text-align: center; vertical-align: top">
+                            <h:outputText value="#{aCrypto.symbol}"/>
+                        </p:column>
+
+                       <!--
+                       *********************
+                       *   Currency Logo   *
+                       *********************
+                       -->
+                       <p:column exportable="false" headerText="Logo" style="width: 60px; text-align: center; vertical-align: top" >
+                           <h:graphicImage value="https://s2.coinmarketcap.com/static/img/coins/64x64/#{aCrypto.getCoinID()}.png" width="60px" />
+                       </p:column>
+
+                        <!--
+                        *****************************
+                        *   Currency Description    *
+                        *****************************
+                        -->
+                        <p:column headerText="Description" sortBy="#{aCrypto.description}" filterBy="#{aCrypto.description}" filterMatchMode="contains"
+                                  exportFunction="#{aCrypto.getDescription()}" style="vertical-align: top; width: 300px; text-align:center;">
+                            <h:outputText value="#{aCrypto.description}" styleClass="scrollableTextBox"/>
+                        </p:column>
+
+
+                        <!--
+                        ***********************************
+                        *   Currency Obtainment Method    *
+                        ***********************************
+                        -->
+                        <p:column headerText="Obtainment Method" sortBy="#{aCrypto.obtainmentMethod}" filterBy="#{aCrypto.obtainmentMethod}" filterMatchMode="contains"
+                                  exportFunction="#{aCrypto.getObtainmentMethod()}" style="width: 60px; text-align: center; vertical-align: top">
+                            <h:outputText value="#{aCrypto.obtainmentMethod}"/>
+                        </p:column>
+
+                        <!--
+                        ***********************
+                        *   Currecncy Price   *
+                        ***********************
+                        -->
+                        <p:column headerText="Current Price" sortBy="#{aCrypto.price}" filterBy="#{aCrypto.price}" filterMatchMode="contains"
+                                  exportFunction="#{aCrypto.getPrice()}" style="width: 60px; text-align: center; vertical-align: top" >
+                            <h:outputText value="#{aCrypto.price}">
+                            <!-- Insert commas as thousand separators -->
+                                <f:convertNumber currencySymbol="$" type="currency"/>
+                            </h:outputText>
+                        </p:column>
+
+                        <!--
+                        *****************************
+                        *   Currency Release Date   *
+                        *****************************
+                        -->
+                        <p:column headerText="Release Date" sortBy="#{aCrypto.releaseDate}"
+                                  filterBy="#{aCrypto.releaseDate}" filterMatchMode="contains"
+                                  style="width: 100px; height: 70px; text-align: center; vertical-align: top">
+                            <h:outputText value="#{aCrypto.releaseDate}">
+                                <f:convertDateTime pattern="MM/dd/yyyy" />
+                            </h:outputText>
+                        </p:column>
+
+                        <!--
+                        **************************************
+                        *   Last time currency was updated   *
+                        **************************************
+                        -->
+                        <p:column headerText="Last Updated" sortBy="#{aCrypto.lastUpdatedDate}"
+                                  filterBy="#{aCrypto.lastUpdatedDate}" filterMatchMode="contains"
+                                  style="width: 100px; height: 70px; text-align: center; vertical-align: top">
+                            <h:outputText value="#{aCrypto.lastUpdatedDate}">
+                                <f:convertDateTime pattern="MM/dd/yyyy" />
+                            </h:outputText>
+                        </p:column>
+
+
+                        <!--
+                        *************************
+                        *   Data Table Footer   *
+                        *************************
+                        -->
+                        <f:facet name="footer">
+                            <div align="center">
+                                <!-- These command buttons require id since they are referenced to be activated or deactivated -->
+
+                                <!--
+                                ==================
+                                VIEW (Read) Button
+                                ==================
+                                -->
+                                <p:commandButton id="viewButton" value="View" icon="fas fa-eye" styleClass="rounded-button"
+                                                 update=":CryptoCurrencyViewForm" oncomplete="PF('CryptoCurrencyViewDialog').show()"
+                                                 disabled="#{empty cryptoCurrencyController.selected}"/>
+                                &nbsp;
+
+                                <!--
+                                ==================
+                                Pie CHART Button
+                                ==================
+                                -->
+                                <p:commandButton id="sentimentButton" value="Pie Chart" icon="fas fa-chart-bar" styleClass="rounded-button"
+                                                 action="#" ajax="false"
+                                                 disabled="#{empty companyController.selected}" />
+
+                                &nbsp;
+                                <!-- GO BACK button -->
+                                <p:button id="backButton" icon="fas fa-arrow-left" styleClass="ui-button-outlined"
+                                          outcome="/databaseSearch/Search" value="Go Back"/>
+                            </div>
+                        </f:facet>
+                    </p:dataTable>
+                </p:panel>
+            </h:form>
+
+
+            <!-- Clicking the View button displays the included View.xhtml file in a dialog window on top of this page. -->
+            <ui:include src="/cryptoCurrency/cryptoView.xhtml"/>
+
+        </div>
+    </ui:define>
+
+</ui:composition>
+
+</html>

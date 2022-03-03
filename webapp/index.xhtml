@@ -1,0 +1,50 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+  - Created by team 7 Sean Gruber, Sandesh Jain, Ryan Wood
+  -->
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"   
+      xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+      xmlns:p="http://primefaces.org/ui"
+      xmlns:f="http://xmlns.jcp.org/jsf/core"
+      xmlns:h="http://xmlns.jcp.org/jsf/html">
+
+
+    <!-- This page is constructed based on the siteTemplate -->
+    <ui:composition template="/template/siteTemplate.xhtml">
+
+        <!-- Create the content for this page below -->
+        <ui:define name="editableContent">
+            <div align="center">
+                <!-- 
+                ========================================
+                *   PrimeFaces Galleria Image Slider   *
+                ========================================
+                Various effect options for transitions: blind, bounce, clip, drop, explode, fade,
+                fold, highlight, puff, pulsate, scale, shake, size, slide, and transfer.
+                -->
+                <p:galleria value="#{galleriaManager.listOfPhotos}" var="aPhoto" numVisible="7"
+                            responsiveOptions="#{galleriaManager.responsiveOptions1}"
+                            circular="true" autoPlay="true" transitionInterval="4000"
+                            showCaption="true" style="max-width: 550px">
+
+                    <p:graphicImage value="#{aPhoto.regularPhotoFilepath}" alt="#{aPhoto.title}" style="width: 100%; display: block;" />
+
+                    <f:facet name="caption">
+                        <span class="p-mb-2">#{aPhoto.title}</span>
+                    </f:facet>
+
+                    <f:facet name="thumbnail">
+                        <p:graphicImage value="#{aPhoto.thumbnailPhotoFilepath}" alt="#{aPhoto.title}" style="display: block;" />
+                    </f:facet>
+
+                </p:galleria>
+                &nbsp;
+                <h:form id="populateDB">
+                    <p:commandButton id="populateDBCrypto" value="Populate Crypto-CurrencyDB" icon="fas fa-plus" styleClass="rounded-button"
+                                action="#{updatedCryptoCurrencyController.fillDatabase()}"/>
+                </h:form>
+            </div>
+        </ui:define>
+    </ui:composition>
+</html>

@@ -1,0 +1,65 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!--
+  - Created by Ryan Wood on 2021.12.7
+  - Copyright © 2021 Ryan Wood. All rights reserved.
+  -->
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+      xmlns:h="http://xmlns.jcp.org/jsf/html"
+      xmlns:p="http://primefaces.org/ui"
+      xmlns:f="http://xmlns.jcp.org/jsf/core">
+
+    <ui:composition>
+        <!--
+        *********************************************
+        Dialog pop-up window to VIEW (READ) a company
+        *********************************************
+        -->
+        <p:dialog id="CompanyViewDlg" header="View Stock" widgetVar="CompanyViewDialog"
+                  modal="true" position="center" appendTo="@(body)"
+                  showEffect="slide" hideEffect="fade" responsive="true" >
+
+            <h:form id="CompanyViewForm" class="ui-datatable-data">
+                <div align="center">
+                    <h:panelGroup id="display">
+
+                        <h:graphicImage value="#{companyController.selected.logo}" style="width:200px" />
+
+                        <br /><br />
+                        <p:panelGrid columns="2" columnClasses="panelGridColumn1, panelGridColumn2" 
+                                     rendered="#{companyController.selected != null}">
+
+                            <h:outputText value="Name:"/>
+                            <h:outputText value="#{companyController.selected.name}" />
+
+                            <h:outputText value="Symbol:"/>
+                            <h:outputText value="#{companyController.selected.ticker}" />
+
+                            <h:outputText value="Description:"/>
+                            <h:outputText value="#{companyController.selected.description}" styleClass="scrollableTextBox"/>
+
+                            <h:outputText value="Sector:"/>
+                            <h:outputText value="#{companyController.selected.sector}" />
+
+                            <h:outputText value="Price:"/>
+                            <h:outputText value="#{companyController.selected.price}" >
+                                <!-- Insert commas as thousand separators -->
+                                <f:convertNumber type="number" groupingUsed="true" />
+                            </h:outputText>
+
+
+                        </p:panelGrid>
+                    </h:panelGroup>
+                    <br /><br />
+                    <h:panelGroup>
+                        <!-- CLOSE button -->
+                        <p:commandButton value="Close" icon="fas fa-window-close" styleClass="ui-button-outlined"
+                                         onclick="PF('CompanyViewDialog').hide()" />
+                    </h:panelGroup>
+                    <br /><br />
+                </div>
+            </h:form>
+        </p:dialog>
+    </ui:composition>
+</html>

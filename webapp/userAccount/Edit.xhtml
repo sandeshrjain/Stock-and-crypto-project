@@ -1,0 +1,61 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!--
+  - Created by Sandesh Jain on 2021.7.16
+  - Copyright © 2021 Sandesh Jain. All rights reserved.
+  -->
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+        "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+      xmlns:h="http://xmlns.jcp.org/jsf/html"
+      xmlns:f="http://xmlns.jcp.org/jsf/core"
+      xmlns:p="http://primefaces.org/ui">
+
+<ui:composition>
+    <!--
+    =============================================================================
+    |  Clicking the Edit button in List.xhtml displays this Dialog              |
+    =============================================================================
+    -->
+    <p:dialog id="UserVideoEditDlg" header="Enter Two Factor Authentication Pin" widgetVar="UserVideoEditDialog"
+              modal="true" position="center" appendTo="@(body)"
+              showEffect="slide" hideEffect="fade" responsive="true">
+        <!--
+        Various effect options can be used when showing and closing the dialog.
+        Use showEffect and hideEffect options to apply these effects:
+            blind, bounce, clip, drop, explode, fade, fold, highlight, puff,
+            pulsate, scale, shake, size, slide and transfer. [PrimeFaces Documentation]
+        -->
+
+        <!-- class="ui-datatable-data" in siteStyles reduces row paddings -->
+        <h:form id="UserVideoEditForm" class="ui-datatable-data">
+            <h:panelGroup id="display">
+                <p:panelGrid columns="2" columnClasses="panelGridColumn1, panelGridColumn2">
+
+                    <h:outputLabel value="Two Factor:" for="twofa"/>
+
+                    <p:inputText id="twofa" value="#{loginManager.rec_tfa}"  style="width: 290px"
+                                 feedback="false">
+                    </p:inputText>
+
+                </p:panelGrid>
+
+            </h:panelGroup>
+
+            <h:panelGroup>
+                <br/>
+                <div align="center">
+                    <!-- SAVE button -->
+                    <p:commandButton value="Save" icon="fas fa-save" styleClass="rounded-button"
+                                     ajax="false" action="#{loginManager.confirm()}"/>
+                    &nbsp;
+                    <p:commandButton value="Bypass" icon="fas fa-forward" styleClass="rounded-button"
+                                     ajax="false" action="/userAccount/Profile?faces-redirect=true"/>
+                    &nbsp;
+                </div>
+            </h:panelGroup>
+        </h:form>
+
+    </p:dialog>
+</ui:composition>
+</html>

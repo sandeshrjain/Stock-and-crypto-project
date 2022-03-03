@@ -1,0 +1,311 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!--
+  - Created by Sandesh Jain, Ryan Wood, and Sean Gruber on 2021.7.19
+  - Copyright © 2021 Sandesh Jain, Ryan Wood, and Sean Gruber. All rights reserved.
+  -->
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+      xmlns:h="http://xmlns.jcp.org/jsf/html"
+      xmlns:f="http://xmlns.jcp.org/jsf/core"
+      xmlns:p="http://primefaces.org/ui"
+      xmlns:c="http://xmlns.jcp.org/jsp/jstl/core">
+
+<!-- Do not enter tags before the composition line since they are ignored by JSF -->
+
+<!-- This page is constructed based on the siteTemplate -->
+<ui:composition template="/template/siteTemplate.xhtml">
+
+    <ui:define name="title">
+        <!-- Set the page title -->
+        <h:outputText value="User Companies List" />
+    </ui:define>
+
+    <!-- Create the content for this page below -->
+    <ui:define name="editableContent">
+
+        <!-- In case of JSF validation error, set 'selected' to null in usercompanyController -->
+        <c:if test="#{facesContext.validationFailed}">
+            ${usercompanyController.unselect()}
+        </c:if>
+
+        <!-- Set 'selected' to null in usercompanyController when the user refreshes / reloads this JSF page -->
+        <f:metadata>
+            <f:viewAction action="#{usercompanyController.unselect()}" rendered="#{facesContext.postback}" />
+        </f:metadata>
+
+        <div align="center">
+            <h:form id="CompanyListForm">
+                <p:panel header="List of User Companies">
+                    <p:dataTable id="datalist"
+                                 value="#{usercompanyController.listOfUserCompanies}"
+                                 var="aCompany"
+                                 widgetVar="companiesDataTable"
+                                 selectionMode="single"
+                                 selection="#{usercompanyController.selected}"
+                                 reflow="true"
+                                 showGridlines="false"
+                                 paginator="true"
+                                 rowKey="#{aCompany.id}"
+                                 rows="5"
+                                 rowsPerPageTemplate="5,10,15,20,30,40,50"
+                                 emptyMessage="No company found for the search query entered!" >
+
+                        <p:ajax event="rowSelect"   update="createButton viewButton editButton deleteButton shareButton"/>
+                        <p:ajax event="rowUnselect" update="createButton viewButton editButton deleteButton shareButton"/>
+
+                        <!--
+                        viewButton editButton deleteButton shareButton
+                        *************************
+                        *   Data Table Header   *
+                        *************************
+                        -->
+                        <f:facet name="header">
+                            <div align="center">
+                                <p:inputText id="globalFilter" onkeyup="PF('companiesDataTable').filter()" filterMatchMode="contains"
+                                             style="width: 250px"
+                                             placeholder="Enter Global Search Query" />
+                                &nbsp;
+                                <p:commandButton type="button" value="Clear All Filters" styleClass="ui-button-outlined"
+                                                 icon="fas fa-undo" onclick="PF('companiesDataTable').clearFilters()" />
+                            </div>
+                        </f:facet>
+
+                        <!--
+                        ********************
+                        *   Company NAME   *
+                        ********************
+                        -->
+                        <p:column headerText="Company Name" sortBy="#{aCompany.name}" filterBy="#{aCompany.name}" filterMatchMode="contains"
+                                  exportFunction="#{aCompany.getName()}" style="width: 100px; vertical-align: top" >
+                            <!-- Clicking the company name in the data table displays the company's website -->
+                            <a href="#{aCompany.website}" target="_blank" style="color:blue">#{aCompany.name}</a>
+                        </p:column>
+
+                        <!--
+                        ********************
+                        *   Company LOGO   *
+                        ********************
+                        Company Logo column displays company logo file stored in and accessed from
+                        a directory external to the app's root directory.
+                        -->
+                        <p:column exportable="false" headerText="Logo" style="width: 60px; text-align: center; vertical-align: top" >
+                            <div align="center">
+                                <h:graphicImage value="#{aCompany.logo}" width="60px" />
+                            </div>
+                        </p:column>
+
+                        <!--
+                        ******************************
+                        *   Company Stock EXCHANGE   *
+                        ******************************
+                        -->
+                        <p:column headerText="Exchange" sortBy="#{aCompany.exchange}" filterBy="#{aCompany.exchange}" filterMatchMode="contains"
+                                  exportFunction="#{aCompany.getExchange()}" style="width: 60px; text-align: center; vertical-align: top">
+                            <h:outputText value="#{aCompany.exchange}"/>
+                        </p:column>
+
+                        <!--
+                        ***********************************
+                        *   Company Stock TICKER Symbol   *
+                        ***********************************
+                        -->
+                        <p:column headerText="Stock Symbol" sortBy="#{aCompany.ticker}" filterBy="#{aCompany.ticker}" filterMatchMode="contains"
+                                  exportFunction="#{aCompany.getTicker()}" style="width: 60px; text-align: center; vertical-align: top" >
+                            <h:outputText value="#{aCompany.ticker}"/>
+                        </p:column>
+
+                        <!--
+                        ********************************
+                        *   Company Price in Dollars   *
+                        ********************************
+                        -->
+                        <p:column headerText="Price" sortBy="#{aCompany.price}"
+                                  exportFunction="#{usercompanyController.convertIntToString(aCompany.price)}"
+                                  style="width: 60px; text-align: center; vertical-align: top" >
+                            <!--Display $ before conversion -->
+                            <h:outputText value="#{aCompany.price}">
+                            <!-- Insert commas as thousand separators -->
+                            <f:convertNumber type="number" groupingUsed="true" />
+                        </h:outputText>
+                        </p:column>
+
+
+                        <!--
+                        ***********************************
+                        *   Company Stock Description     *
+                        ***********************************
+                        -->
+                        <p:column headerText="Description" sortBy="#{aCompany.description}" filterBy="#{aCompany.description}" filterMatchMode="contains"
+                                  exportFunction="#{aCompany.getDescription()}" style="vertical-align: top; width: 300px; text-align:center;" >
+                            <h:outputText value="#{aCompany.description}" styleClass="scrollableTextBox"/>
+                        </p:column>
+
+
+                        <!--
+                        *******************************************
+                        *   An analysts price of the stock in     *
+                        *******************************************
+                        -->
+                        <p:column headerText="Analysyt's Price" sortBy="#{aCompany.analystPrice}"
+                                  exportFunction="#{usercompanyController.convertIntToString(aCompany.analystPrice)}"
+                                  style="width: 60px; text-align: center; vertical-align: top" >
+                            <!--Display $ before conversion -->
+                            $<h:outputText value="#{aCompany.analystPrice}">
+                            <!-- Insert commas as thousand separators -->
+                            <f:convertNumber type="number" groupingUsed="true" />
+                        </h:outputText>
+                        </p:column>
+
+                        <!--
+                        *******************************************
+                        *   Company REVENUES in Million Dollars   *
+                        *******************************************
+                        -->
+                        <p:column headerText="Revenue Per Share" sortBy="#{aCompany.revenues}"
+                                  exportFunction="#{usercompanyController.convertIntToString(aCompany.revenues)}"
+                                  style="width: 60px; text-align: center; vertical-align: top" >
+                            <!--Display $ before conversion -->
+                            $<h:outputText value="#{aCompany.revenues}">
+                                <!-- Insert commas as thousand separators -->
+                                <f:convertNumber type="number" groupingUsed="true" />
+                            </h:outputText>
+                         </p:column>
+
+                        <!--
+                        *******************************
+                         *   Company Business SECTOR   *
+                        *******************************
+                        -->
+                        <p:column headerText="Sector" sortBy="#{aCompany.sector}" filterBy="#{aCompany.sector}" filterMatchMode="contains"
+                                  exportFunction="#{aCompany.getSector()}"
+                                  style="width: 60px; text-align: center; vertical-align: top" >
+                            <h:outputText value="#{aCompany.sector}"/>
+                        </p:column>
+
+                        <p:column headerText="User Photo" style="width:100px;">
+                            <div align="center">
+                                <h:graphicImage class="smallProfilePhoto" value="#{userController.userPhoto()}"/>
+                            </div>
+                        </p:column>
+
+                        <!--
+                        *************************
+                        *   Data Table Footer   *
+                        *************************
+                        -->
+                        <f:facet name="footer">
+                            <div align="center">
+                                <!-- These command buttons require id since they are referenced to be activated or deactivated -->
+                                <!--
+                                =============
+                                CREATE Button
+                                =============
+                                -->
+                                <p:commandButton id="createButton" value="Create" icon="fas fa-plus" styleClass="rounded-button"
+                                                 actionListener="#{usercompanyController.prepareCreate()}"
+                                                 update=":CompanyCreateForm" oncomplete="PF('CompanyCreateDialog').show()"/>
+                                &nbsp;
+<!--                                &lt;!&ndash;-->
+<!--                                ==================-->
+<!--                                VIEW (Read) Button-->
+<!--                                ==================-->
+<!--                                &ndash;&gt;-->
+                                <p:commandButton id="viewButton" value="View" icon="fas fa-eye" styleClass="rounded-button"
+                                                 update=":CompanyViewForm" oncomplete="PF('CompanyViewDialog').show()"
+                                                 disabled="#{empty usercompanyController.selected}"/>
+                                &nbsp;
+                                <!--
+                                ====================
+                                EDIT (Update) Button
+                                ====================
+                                -->
+                                <p:commandButton id="editButton" value="Edit" icon="fas fa-edit" styleClass="rounded-button"
+                                                 update=":CompanyEditForm" oncomplete="PF('CompanyEditDialog').show()"
+                                                 disabled="#{empty usercompanyController.selected}"/>
+                                &nbsp;
+
+                                <p:commandButton id="shareButton" value="Share" icon="fas fa-share"
+                                                 styleClass="rounded-button"
+                                                 actionListener="#{companyController.prepareShare(usercompanyController.selected)}"
+                                                 update="datalist,:growlInfoMessage,:growlWarningMessage,:growlErrorMessage,:growlFatalMessage"
+                                                 disabled="#{empty usercompanyController.selected}">
+                                    <p:confirm header="Share Confirmation"
+                                               message="Are you sure you want to add the selected company to the Public List of Favorite Companies?"/>
+                                </p:commandButton>
+                                <!-- ***************************************************
+                                    Display a Confirmation dialog for the Share button
+                                    **************************************************** -->
+                                <p:confirmDialog id="confirmDialogBox1" global="true" showEffect="fade" hideEffect="fade"
+                                                 responsive="true" width="350">
+                                    <div align="center">
+                                        <p:commandButton value="No" type="button" styleClass="ui-confirmdialog-no"
+                                                         icon="fas fa-window-close"/>
+                                        &nbsp;
+                                        <p:commandButton value="Yes" type="button"
+                                                         class="ui-confirmdialog-yes ui-button-danger"
+                                                         update="display,:growlInfoMessage,:growlWarningMessage,:growlErrorMessage,:growlFatalMessage"
+
+                                                         icon="fas fa-check-square"/>
+                                    </div>
+                                </p:confirmDialog>
+                                &nbsp;
+
+                                <!--
+                                =============
+                                DELETE Button
+                                =============
+                                -->
+                                <!--
+                                ***************************************************
+                                Display a Confirmation dialog for the DELETE button
+                                ***************************************************
+                                -->
+                                <p:commandButton id="deleteButton" value="Delete" icon="fas fa-trash-alt" styleClass="rounded-button"
+                                                 actionListener="#{usercompanyController.destroy()}"
+                                                 update="growlInfoMessage,datalist" disabled="#{empty usercompanyController.selected}">
+
+                                    <p:confirm header="Deletion Confirmation"
+                                               message="Are you sure you want to permanently delete the selected company #{usercompanyController.selected.name} from the database?" />
+                                </p:commandButton>
+
+                                <p:confirmDialog id="confirmDialogBox" global="true" showEffect="fade" hideEffect="fade" responsive="true" width="350">
+                                    <div align="center">
+                                        <p:commandButton value="No" type="button" styleClass="ui-confirmdialog-no" icon="fas fa-window-close" />
+                                        &nbsp;
+                                        <p:commandButton value="Yes" type="button" class="ui-confirmdialog-yes ui-button-danger" icon="fas fa-check-square" />
+                                    </div>
+                                </p:confirmDialog>
+                                <!--
+                                ************************************************-->
+<!--                                End of Display of the DELETE Confirmation dialog-->
+<!--                                ************************************************-->
+<!--                                &ndash;&gt;-->
+<!--                                &nbsp;-->
+<!--                                &lt;!&ndash;-->
+<!--                                ==================-->
+<!--                                STOCK CHART Button-->
+<!--                                ==================-->
+<!--                                &ndash;&gt;-->
+<!--                                <p:commandButton id="shareButton" value="Share" icon="fas fa-chart-bar" styleClass="rounded-button"-->
+<!--                                                 action="#{usercompanyController.stockChart()}" ajax="false"-->
+<!--                                                 disabled="#{empty usercompanyController.selected}" />-->
+                            </div>
+                        </f:facet>
+                    </p:dataTable>
+                </p:panel>
+            </h:form>
+
+            <!-- Clicking the Edit button displays the included Edit.xhtml file in a dialog window on top of this page. -->
+
+            <!-- Clicking the View button displays the included View.xhtml file in a dialog window on top of this page. -->
+
+            <ui:include src="/usercompanyInfo/Create.xhtml"/>
+            <ui:include src="/usercompanyInfo/Edit.xhtml"/>
+            <ui:include src="/usercompanyInfo/View.xhtml"/>
+        </div>
+    </ui:define>
+
+</ui:composition>
+
+</html>

@@ -1,0 +1,102 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!--
+  - Created by team 7 Sean Gruber, Sandesh Jain, Ryan Wood
+  -->
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" 
+    "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+      xmlns:h="http://xmlns.jcp.org/jsf/html"
+      xmlns:p="http://primefaces.org/ui">
+
+    <ui:composition>
+
+        <!--
+        ***********************************************
+        Dialog pop-up window to EDIT (UPDATE) a company
+        ***********************************************
+        -->
+        <p:dialog id="UserCryptoCurrencyEditDlg" header="Edit Currency" widgetVar="UserCryptoCurrencyEditDialog"
+                  modal="true" position="center" appendTo="@(body)"
+                  showEffect="slide" hideEffect="fade" responsive="true" >
+
+            <h:form id="UserCryptoCurrencyEditForm" class="ui-datatable-data">
+                <div align="center">
+                    <h:panelGroup id="display">
+
+<!--                        <h:graphicImage value="#{companyController.logoFileStoragePath()}#{companyController.selected.ticker}.png"-->
+<!--                                        style="width:200px" />-->
+                        <br /><br />
+                        <p:panelGrid columns="2" columnClasses="panelGridColumn1, panelGridColumn2" rendered="#{userCryptoCurrencyController.selected != null}">
+
+                            <p:outputLabel value="Currency Name:" for="name" />
+                            <!-- The entered value is set to be the selected new company object's property 'name'  -->
+                            <p:inputText id="name" value="#{userCryptoCurrencyController.selected.name}" style="width: 350px"
+                                         placeholder="Enter Full Crypto Name"
+                                         required="true" requiredMessage="Crptocurrency Name is required!"/>
+
+                            <p:outputLabel value="Symbol:" for="symbol" />
+                            <!-- The entered value is set to be the selected new company object's property 'exchange'  -->
+                            <p:inputText id="symbol" value="#{userCryptoCurrencyController.selected.symbol}" style="width: 350px"
+                                         placeholder="Enter Cryptocurrency Symbol"
+                                         required="true" requiredMessage="Symbol is required!"/>
+
+                            <p:outputLabel value="Description:" for="description" />
+                            <!-- The entered value is set to be the selected new company object's property 'description'  -->
+                            <p:inputText id="description" value="#{userCryptoCurrencyController.selected.description}" style="width: 350px"
+                                         placeholder="Enter Cryptocurrency's Description"
+                                         required="true" requiredMessage="Description is required!"/>
+
+                            <p:outputLabel value="Obtainment Method:" for="method" />
+                            <p:inputText id="method" value="#{userCryptoCurrencyController.selected.obtainmentMethod}"
+                                         placeholder="Enter Cryptocurrency's obtainment method"
+                                         required="true" requiredMessage="Description is required!"/>
+
+                            <p:outputLabel value="Price:" for="price" />
+                            <p:inputNumber id="price" value="#{userCryptoCurrencyController.selected.price}"
+                                           decimalPlaces="0" thousandSeparator=","
+                                           required="true" requiredMessage="Price is required!"/>
+
+                            <p:outputLabel value="Release Date:" for="date" />
+                            <!--
+                            Date is stored in the database in the format YYYY-MM-DD so that it is sortable.
+                            However, we ask the user to enter the date as MM/DD/YYYY since it is the familiar format.
+                            -->
+                            <p:calendar id="date" pattern="yyyy/MM/dd" mask="true"
+                                        value="#{userCryptoCurrencyController.selected.releaseDate}"
+                                        required="true" requiredMessage="Cryptocurrency release date is required!" />
+
+
+                            <p:outputLabel value="Last Updated:" for="lastDate" />
+                            <!--
+                            Date is stored in the database in the format YYYY-MM-DD so that it is sortable.
+                            However, we ask the user to enter the date as MM/DD/YYYY since it is the familiar format.
+                            -->
+                            <p:calendar id="lastDate" pattern="yyyy/MM/dd" mask="true"
+                                        value="#{userCryptoCurrencyController.selected.lastUpdatedDate}"
+                                        required="true" requiredMessage="Last Updated date is required!" />
+                        </p:panelGrid>
+                    </h:panelGroup>
+                    <br /><br />
+                    <h:panelGroup>
+                        <!-- SAVE button -->
+                        <p:commandButton value="Save" icon="fas fa-save" styleClass="rounded-button"
+                                         ajax="false" actionListener="#{userCryptoCurrencyController.checkEdit()}"
+                                         update="display,:UserCryptoCurrencyListForm:datalist,:growlInfoMessage"
+                                         oncomplete="handleSubmit(args, 'CryptoCurrencyEditDialog');"/>
+                        &nbsp;
+                        <!-- CANCEL button -->
+                        <p:commandButton value="Cancel" icon="fas fa-ban" styleClass="ui-button-outlined"
+                                         immediate="true" onclick="PF('UserCryptoCurrencyEditDialog').hide()"/>
+                        <!--
+                        With immediate="true" on the p:commandButton, the Cancel action is invoked during the
+                        JSF lifecycle phase "Apply Request Values" and all the remaining phases are skipped.
+                        -->
+                    </h:panelGroup>
+                    <br /><br />
+                </div>
+            </h:form>
+
+        </p:dialog>
+    </ui:composition>
+</html>

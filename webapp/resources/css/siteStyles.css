@@ -1,0 +1,300 @@
+/*****************************************************
+*   Cascading Style Sheets (CSS) Style Definitions   *
+*   Created by team 7 Sean Gruber, Sandesh Jain, Ryan Wood      *
+*****************************************************/
+
+html, body {
+    background-color: linen;
+    margin: 0 0 0 0;    /* top right bottom left */
+    width: 100%;        /* Set page width horizontally 100% */
+    height: 100%;       /* Set page height vertically 100% */
+}
+
+body, p {
+    font-family: "Times New Roman", Times, sans-serif;
+    font-size: 12pt;
+    font-style: normal;
+    font-weight: normal;
+    text-decoration: none;
+    color: black;
+}
+
+h1, .title {
+    font-family: Arial, Helvetica, sans-serif;
+    font-size: 12pt;
+    font-style: normal;
+    font-weight: normal;
+    text-decoration: none;
+    color: maroon;
+}
+
+/*
+=======================================
+|   Site Template Component Styling   |
+=======================================
+*/
+#page {
+    font-family: "Times New Roman", Times, sans-serif;
+    font-size: 12pt;
+    font-style: normal;
+    font-weight: normal;
+    text-decoration: none;
+    color: black;
+}
+/*
+Style the div component whose unique id is "header"
+<div id="header"> in siteTemplate
+*/
+#header {
+    background-color: azure;
+    width: 100%;
+    height: 84px;
+    position: absolute;
+    left: 0;
+    top: 0;
+    right: 0;
+    margin-bottom: 16px;
+}
+/*
+Style the div component whose unique id is "editableContent"
+<div id="editableContent"> in siteTemplate
+*/
+#editableContent {
+    /* height = 100% window height - (header height 84px + footer height 100px) */
+    height: calc(100% - 184px);
+    width: 100%;
+    left: 0;
+    right: 0;
+    margin-top: 100px;
+    margin-bottom: 16px;
+}
+/*
+Style the div component whose unique id is "footer"
+<div id="footer"> in siteTemplate
+*/
+#footer {
+    height: 100px;
+    width: 100%;
+    left: 0;
+    right: 0;
+    bottom: 0;
+}
+
+/*
+==========================
+|   Styling Hyperlinks   |
+==========================
+*/
+
+/* Set the font family for the standard HTML tag "a" for hyperlinks */
+a {
+    font-family: Arial, Helvetica, sans-serif;
+    font-size: 10pt;
+}
+
+a:link {
+    text-decoration: none; /* Do not underline the link in normal state */
+}
+
+a:visited {
+    text-decoration: none; /* Do not underline the link in visited state */
+}
+
+a:hover {
+    text-decoration: underline; /* Underline the link in hover state */
+}
+
+a:active {
+    text-decoration: underline; /* Underline the link in active state */
+}
+
+/*
+================================
+|   Vertical Navigation Menu   |
+================================
+Used in Profile
+*/
+/* Style class for <ul> */
+.verticalMenu {
+    list-style-type: none;
+    margin: 0;
+    padding: 0;
+    width: 180px;
+    background-color: azure;
+    border: 1px solid darkgray;
+
+}
+
+/* Style class for <li> */
+.verticalMenuItem {
+    text-align: left;
+    border-bottom: 1px solid darkgray;
+}
+
+/* Style class for <li> and the <a> tag that defines a hyperlink */
+.verticalMenuItem a {
+    display: block;
+    color: black;
+    padding: 8px 16px;
+    text-decoration: none;  /* Do not underline the hyperlink */
+}
+
+/* Style class for <ul>, <li> and <a> hyperlink tag */
+.verticalMenu, .verticalMenuItem a {
+    font-family: Arial, Helvetica, sans-serif;
+    font-size: 10pt;
+    font-style: normal;
+    font-weight: normal;
+}
+
+/* Style class for <li> last-child */
+.verticalMenuItem:last-child {
+    border-bottom: none;
+}
+
+/* Style class for <li> for mouse over state */
+.verticalMenuItem a:hover {
+    background-color: lightskyblue;
+}
+
+/*
+=======================================
+|   Responsive YouTube Video Player   |
+=======================================
+We use the 9/16 (=56.25) ratio to play YouTube Videos.
+The padding-top applies the ratio of 56.25% to make sure
+that the width and height preserve the 9/16 ratio.
+*/
+
+.responsive-container {
+    position: relative;
+    overflow: hidden;
+    padding-top: 56.25%;
+}
+
+.responsive-iframe {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    border: 0;
+}
+
+/*
+===============================
+|   Other Style Definitions   |
+===============================
+*/
+
+/* Used in headerTemplate */
+.headerTitle {
+    font-family: "Times New Roman", Times, serif;
+    font-size: 18pt;
+    font-style: italic;
+    font-weight: normal;
+    text-decoration: none;
+    color: mediumblue;
+}
+
+/* Scrolls text vertically */
+.scrollableTextBox {
+    display: block;
+    text-align: left;
+    width: 300px;
+    height: 70px;
+    overflow-x: hidden;
+    overflow-y: scroll;
+    white-space: normal;
+    overflow-wrap: break-word;
+}
+
+/* Used in Profile to style person's photo in a circle */
+.profilePhoto {
+    display: inline-block;
+    width: 150px;
+    height: 150px;
+    border-radius: 50%;
+    background-repeat: no-repeat;
+    background-position: center center;
+    background-size: cover;
+}
+
+/* Used in headerTemplate to style user's small photo in a circle */
+.smallProfilePhoto {
+    display: inline-block;
+    width: 36px;
+    height: 36px;
+    border-radius: 50%;
+    background-repeat: no-repeat;
+    background-position: center center;
+    background-size: cover;
+    vertical-align: middle;
+}
+
+/*
+Proportionately scale image to show on mobile devices and smaller browser windows.
+Scale the image downward, but do not enlarge it beyond the width size of 500px.
+*/
+.scalableImage {
+    max-width: 100%;
+    height: auto;
+    border: none;
+}
+
+/* Style p:panelGrid Column 1 */
+.panelGridColumn1 {
+    text-align: right;
+    white-space: nowrap;        /* Disallow line break */
+    padding-top: 5px !important;
+    padding-bottom: 5px !important;
+    background-color: papayawhip !important;
+}
+
+/* Style p:panelGrid Column 2 */
+.panelGridColumn2 {
+    text-align: left;
+    padding-top: 5px !important;
+    padding-bottom: 5px !important;
+    background-color: oldlace !important;
+}
+
+/* Used to color panel backgrounds */
+.ui-panel-content {
+    background-color: oldlace !important;
+}
+
+/*
+======================================
+|   Skinning PrimeFaces Components   |
+======================================
+*/
+
+/* PrimeFaces dataTable Row Paddings */
+.ui-datatable-data td {
+    padding-top: 3px !important;
+    padding-bottom: 3px !important;
+}
+
+/* Skinning PrimeFaces Galleria Image Slider */
+.ui-galleria-caption {
+    position: absolute;
+    left: 0 !important;
+    background-color: rgba(240, 255, 255, 0.8) !important;
+    padding: 0 !important;
+}
+
+/* Override PrimeFaces styles for the fileUpload component */
+.ui-fileupload {
+    width: 80%;
+}
+
+.ui-fileupload-buttonbar {
+    /* padding values are specified in clockwise: Top, Right, Bottom, and Left */
+    padding: 0 0 8px 0 !important;
+}
+
+.ui-fileupload-content {
+    /* The drag-and-drop area height will increase as more files are dropped */
+    min-height: 200px;
+}

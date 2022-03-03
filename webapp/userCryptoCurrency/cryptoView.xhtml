@@ -1,0 +1,85 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!--
+  - Created by team 7 Sean Gruber, Sandesh Jain, Ryan Wood
+  -->
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+      xmlns:h="http://xmlns.jcp.org/jsf/html"
+      xmlns:p="http://primefaces.org/ui"
+      xmlns:f="http://xmlns.jcp.org/jsf/core">
+
+    <ui:composition>
+        <!--
+        *********************************************
+        Dialog pop-up window to VIEW (READ) a company
+        *********************************************
+        -->
+        <p:dialog id="UserCryptoCurrencyViewDlg" header="View Cryptocurrency" widgetVar="UserCryptoCurrencyViewDialog"
+                  modal="true" position="center" appendTo="@(body)"
+                  showEffect="slide" hideEffect="fade" responsive="true" >
+
+            <h:form id="UserCryptoCurrencyViewForm" class="ui-datatable-data">
+                <div align="center">
+                    <h:panelGroup id="display">
+
+                       <h:graphicImage value="https://s2.coinmarketcap.com/static/img/coins/64x64/#{userCryptoCurrencyController.selected.getCoinID()}.png"
+                                       style="width:100px" />
+                        <br /><br />
+                        <p:panelGrid columns="2" columnClasses="panelGridColumn1, panelGridColumn2" 
+                                     rendered="#{userCryptoCurrencyController.selected != null}">
+
+                            <h:outputText value="Name:"/>
+                            <h:outputText value="#{userCryptoCurrencyController.selected.name}" />
+
+                            <h:outputText value="Symbol:"/>
+                            <h:outputText value="#{userCryptoCurrencyController.selected.symbol}" />
+
+                            <h:outputText value="Website Link:"/>
+                            <h:outputText value="#{userCryptoCurrencyController.selected.websiteLink}" />
+
+                            <h:outputText value="Description:"/>
+                            <h:outputText value="#{userCryptoCurrencyController.selected.description}" styleClass="scrollableTextBox"/>
+
+                            <h:outputText value="Obtainment Method:"/>
+                            <h:outputText value="#{userCryptoCurrencyController.selected.obtainmentMethod}" />
+
+                            <h:outputText value="Price:"/>
+                            <h:outputText value="#{userCryptoCurrencyController.selected.price}" >
+                                <!-- Insert commas as thousand separators -->
+                                <f:convertNumber currencySymbol="$" type="currency"/>
+                            </h:outputText>
+
+                            <h:outputText value="Release Date:"/>
+                            <h:outputText value="#{userCryptoCurrencyController.selected.releaseDate}">
+                                <!--
+                                Date is stored in the database in the format YYYY-MM-DD so that it is sortable.
+                                For display purposes, we convert the database format to MM/DD/YYYY.
+                                -->
+                                <f:convertDateTime pattern="MM/dd/yyyy" />
+                            </h:outputText>
+
+                            <h:outputText value="Last Updated:"/>
+                            <h:outputText value="#{userCryptoCurrencyController.selected.lastUpdatedDate}">
+                                <!--
+                                Date is stored in the database in the format YYYY-MM-DD so that it is sortable.
+                                For display purposes, we convert the database format to MM/DD/YYYY.
+                                -->
+                                <f:convertDateTime pattern="MM/dd/yyyy" />
+                            </h:outputText>
+
+
+                        </p:panelGrid>
+                    </h:panelGroup>
+                    <br /><br />
+                    <h:panelGroup>
+                        <!-- CLOSE button -->
+                        <p:commandButton value="Close" icon="fas fa-window-close" styleClass="ui-button-outlined"
+                                         onclick="UserCryptoViewDialog.hide()" />
+                    </h:panelGroup>
+                    <br /><br />
+                </div>
+            </h:form>
+        </p:dialog>
+    </ui:composition>
+</html>

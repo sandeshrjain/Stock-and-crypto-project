@@ -1,0 +1,107 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!--
+  - Created by team 7 Sean Gruber, Sandesh Jain, Ryan Wood
+  -->
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+      xmlns:h="http://xmlns.jcp.org/jsf/html"
+      xmlns:p="http://primefaces.org/ui"
+      xmlns:f="http://xmlns.jcp.org/jsf/core">
+
+<ui:composition>
+    <!--
+    =================================================================
+    |  Clicking the CREATE button displays this Dialog window       |
+    =================================================================
+    -->
+    <p:dialog id="UserCryptoCurrencyCreateDlg" header="Add New CryptoCurrency" widgetVar="UserCryptoCurrencyCreateDialog"
+              modal="true" position="center" appendTo="@(body)"
+              showEffect="slide" hideEffect="fade" responsive="true" >
+
+        <h:form id="UserCryptoCurrencyCreateForm" class="ui-datatable-data">
+            <h:panelGroup id="display">
+                <p:panelGrid columns="2" columnClasses="panelGridColumn1, panelGridColumn2" >
+                    <!--
+                    When the user clicks the CREATE button in List.xhtml, actionListener="#{userCryptoCurrencyController.prepareCreate}"
+                    executes the prepareCreate method in which a new cryptocurrency object is instantiated and its object reference
+                    is stored in the "selected" instance variable. Thus, "selected" points to a newly created cryptocurrency object
+                    with property (instance variable) values set to empty or null. The inputText data fields below are
+                    intended to assign user-provided values to the properties of the newly created cryptocurrency object.
+                    -->
+                    <p:outputLabel value="Currency Name:" for="name" />
+                    <!-- The entered value is set to be the selected new cryptocurrency object's property 'name'  -->
+                    <p:inputText id="name" value="#{userCryptoCurrencyController.selected.name}" style="width: 350px"
+                                 placeholder="Enter Full Crypto Name"
+                                 required="true" requiredMessage="Crptocurrency Name is required!"/>
+
+                    <p:outputLabel value="Symbol:" for="symbol" />
+                    <!-- The entered value is set to be the selected new cryptocurrency object's property 'exchange'  -->
+                    <p:inputText id="symbol" value="#{userCryptoCurrencyController.selected.symbol}" style="width: 350px"
+                                 placeholder="Enter Cryptocurrency Symbol"
+                                 required="true" requiredMessage="Symbol is required!"/>
+
+                    <p:outputLabel value="Website Link:" for="websiteLink" />
+                    <!-- The entered value is set to be the selected new cryptocurrency object's property 'exchange'  -->
+                    <p:inputText id="websiteLink" value="#{userCryptoCurrencyController.selected.websiteLink}" style="width: 350px"
+                                 placeholder="Enter Cryptocurrency Website Link"
+                                 required="true" requiredMessage="Website Link is required!"/>
+
+                    <p:outputLabel value="Description:" for="description" />
+                    <!-- The entered value is set to be the selected new cryptocurrency object's property 'description'  -->
+                    <p:inputText id="description" value="#{userCryptoCurrencyController.selected.description}" style="width: 350px"
+                                 placeholder="Enter Cryptocurrency's Description"
+                                 required="true" requiredMessage="Description is required!"/>
+
+                    <p:outputLabel value="Obtainment Method:" for="method" />
+                    <p:inputText id="method" value="#{userCryptoCurrencyController.selected.obtainmentMethod}"
+                                 placeholder="Enter Cryptocurrency's obtainment method"
+                                 required="true" requiredMessage="Description is required!"/>
+
+                    <p:outputLabel value="Price:" for="price" />
+                    <p:inputNumber id="price" value="#{userCryptoCurrencyController.selected.price}"
+                                   currencyType="$"
+                                   required="true" requiredMessage="Price is required!"/>
+
+                    <p:outputLabel value="Release Date:" for="date" />
+                    <!--
+                    Date is stored in the database in the format YYYY-MM-DD so that it is sortable.
+                    However, we ask the user to enter the date as MM/DD/YYYY since it is the familiar format.
+                    -->
+                    <p:calendar id="date" pattern="yyyy/MM/dd" mask="true"
+                                value="#{userCryptoCurrencyController.selected.releaseDate}"
+                                required="true" requiredMessage="Cryptocurrency Release date is required!" />
+
+                    <p:outputLabel value="Last Updated:" for="lastDate" />
+                    <!--
+                    Date is stored in the database in the format YYYY-MM-DD so that it is sortable.
+                    However, we ask the user to enter the date as MM/DD/YYYY since it is the familiar format.
+                    -->
+                    <p:calendar id="lastDate" pattern="yyyy/MM/dd" mask="true"
+                                value="#{userCryptoCurrencyController.selected.lastUpdatedDate}"
+                                required="true" requiredMessage="Last Updated date is required!" />
+                </p:panelGrid>
+            </h:panelGroup>
+
+            <h:panelGroup>
+                <br /><br />
+                <div align="center">
+                    <!-- SAVE button -->
+                    <p:commandButton value="Save" icon="fas fa-save" styleClass="rounded-button"
+                                     ajax="false" actionListener="#{userCryptoCurrencyController.checkCreate()}"
+                                     update="display,:CryptoCurrencyListForm:datalist,:growlInfoMessage,:growlWarningMessage,:growlErrorMessage,:growlFatalMessage"
+                                     oncomplete="handleSubmit(args,'CryptoCurrencyCreateDialog');" />
+                    &nbsp;
+                    <!--
+                    CANCEL button: Call the cancel() method immediately without first rendering this JSF page.
+                    The cancel() method will make the selected user video null and show the List page.
+                    -->
+                    <p:commandButton value="Cancel" icon="fas fa-ban" styleClass="ui-button-outlined"
+                                     action="#{userCryptoCurrencyController.cancel()}" ajax="false" immediate="true"
+                                     onclick="PF('CryptoCurrencyCreateDialog').hide()" />
+                </div>
+            </h:panelGroup>
+        </h:form>
+    </p:dialog>
+</ui:composition>
+</html>

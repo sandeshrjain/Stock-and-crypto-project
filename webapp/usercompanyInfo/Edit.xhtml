@@ -1,0 +1,117 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!--
+  - Created by Sandesh Jain on 2021.7.16
+  - Copyright © 2021 Sandesh Jain. All rights reserved.
+  -->
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+        "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+      xmlns:h="http://xmlns.jcp.org/jsf/html"
+      xmlns:f="http://xmlns.jcp.org/jsf/core"
+      xmlns:p="http://primefaces.org/ui">
+
+<ui:composition>
+    <!--
+    ========================================================================
+    |  Clicking the CREATE button in List.xhtml displays this Dialog       |
+    ========================================================================
+    -->
+    <p:dialog id="CompanyEditDlg" header="Edit user company" widgetVar="CompanyEditDialog"
+              modal="true" position="center" appendTo="@(body)"
+              showEffect="slide" hideEffect="fade" responsive="true">
+        <!--
+        Various effect options can be used when showing and closing the dialog.
+        Use showEffect and hideEffect options to apply these effects:
+            blind, bounce, clip, drop, explode, fade, fold, highlight, puff,
+            pulsate, scale, shake, size, slide and transfer. [PrimeFaces Documentation]
+        -->
+
+        <!-- class="ui-datatable-data" in siteStyles reduces row paddings -->
+        <h:form id="CompanyEditForm" class="ui-datatable-data">
+            <h:panelGroup id="display">
+                <p:panelGrid columns="2" columnClasses="panelGridColumn1, panelGridColumn2"
+                             rendered="#{usercompanyController.selected != null}">
+                    <!--
+                    When the user clicks the CREATE button in List.xhtml, actionListener="#{controller.prepareCreate}"
+                    executes the prepareCreate method in which a new object is instantiated and its object reference
+                    is stored in the "selected" instance variable. Thus, "selected" points to a newly created Video object
+                    with property (instance variable) values set to empty or null. The inputText data fields below are
+                    intended to assign user-provided values to the properties of the newly created PublicVideo object.
+                    -->
+                    <p:outputLabel value="Name:" for="name"/>
+                    <p:inputText id="name" value="#{usercompanyController.selected.name}" style="width:200px"
+                                 required="true" requiredMessage="Company title field is required"/>
+
+                    <p:outputLabel value="Exchange:" for="exchange"/>
+                    <p:inputText id="exchange" value="#{usercompanyController.selected.exchange}" style="width:200px"
+                                 required="true" requiredMessage="Field is required"/>
+
+                    <p:outputLabel value="Ticker:" for="ticker"/>
+                    <p:inputText id="ticker" value="#{usercompanyController.selected.ticker}" style="width:200px"
+                                 required="true" requiredMessage="Field is required"/>
+
+                    <p:outputLabel value="Price:" for="price"/>
+                    <p:inputText id="price"
+                                 value="#{usercompanyController.selected.price}" style="width:200px"
+                                 required="true" requiredMessage="Field is required"/>
+
+                    <p:outputLabel value="Description:" for="description"/>
+                    <p:inputText id="description"
+                                 value="#{usercompanyController.selected.description}" style="width:200px"
+                                 required="true" requiredMessage="Field is required"/>
+
+                    <p:outputLabel value="Logo:" for="logo"/>
+                    <p:inputText id="logo"
+                                 value="#{usercompanyController.selected.logo}" style="width:200px"
+                                 required="true" requiredMessage="Field is required"/>
+
+
+                    <p:outputLabel value="Analyst Price:" for="analystPrice"/>
+                    <p:inputText id="analystPrice"
+                                 value="#{usercompanyController.selected.analystPrice}" style="width:200px"
+                                 required="true" requiredMessage="Field is required"/>
+
+
+                    <p:outputLabel value="Revenues:" for="revenues"/>
+                    <p:inputText id="revenues"
+                                 value="#{usercompanyController.selected.revenues}" style="width:200px"
+                                 required="true" requiredMessage="Field is required"/>
+
+
+                    <p:outputLabel value="Sector:" for="sector"/>
+                    <p:inputText id="sector"
+                                 value="#{usercompanyController.selected.sector}" style="width:200px"
+                                 required="true" requiredMessage="Field is required"/>
+
+                    <p:outputLabel value="Website:" for="website"/>
+                    <p:inputText id="website"
+                                 value="#{usercompanyController.selected.website}" style="width:200px"
+                                 required="true" requiredMessage="Field is required"/>
+
+
+                </p:panelGrid>
+            </h:panelGroup>
+
+            <h:panelGroup>
+                <br/>
+                <div align="center">
+                    <!-- SAVE button -->
+                    <p:commandButton value="Save" icon="fas fa-save" styleClass="rounded-button"
+                                     ajax="false" actionListener="#{usercompanyController.update()}"
+                                     update="display,:CompanyEditForm:datalist,:growlInfoMessage,:growlWarningMessage,:growlErrorMessage,:growlFatalMessage"
+                                     oncomplete="handleSubmit(args,'CompanyCreateDialog');"/>
+                    &nbsp;
+                    <!--
+                    CANCEL button: Call the cancel() method immediately without first rendering this JSF page.
+                    The cancel() method will make the selected country object null and show the List page.
+                    -->
+                    <p:commandButton value="Cancel" icon="fas fa-ban" styleClass="ui-button-outlined"
+                                     action="#{usercompanyController.cancel()}" ajax="false" immediate="true"
+                                     onclick="PF('CompanyCreateDialog').hide()"/>
+                </div>
+            </h:panelGroup>
+        </h:form>
+    </p:dialog>
+</ui:composition>
+</html>

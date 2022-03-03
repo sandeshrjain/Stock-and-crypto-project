@@ -1,0 +1,117 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+  - Created by team 7 Sean Gruber, Sandesh Jain, Ryan Wood
+  -->
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" 
+    "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"   
+      xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+      xmlns:p="http://primefaces.org/ui"
+      xmlns:h="http://xmlns.jcp.org/jsf/html">
+
+    <!-- Do not enter tags before the composition line since they are ignored by JSF -->
+
+    <!-- This page is constructed based on the siteTemplate -->
+    <ui:composition template="/template/siteTemplate.xhtml">
+
+        <!-- Create the content for this page below -->
+        <ui:define name="editableContent">
+
+            <!-- Make the stock chart to be horizontally scrollable on mobile devices -->
+            <div align="center" style="overflow-x:auto;">
+                
+                <h:form id="PieChartForm">
+                    <!--
+                    ===========
+                    Stock Chart
+                    ===========
+                    -->
+                    <h1><a href="#{stockChartController.companyUrl}" 
+                           target="_blank">#{stockChartController.companyName}</a> 
+                        #{stockChartController.stockSymbol} Sentiment Analysis
+                    </h1>
+
+                    <p:chart id="pieChart" type="pie" model="#{pieChartController.pieChart}"
+                             style="height:500px;width:900px"/>
+
+                    <br /><br /><br /><br />
+
+                    <p:outputLabel value="Enter the query you would like to search for" for="query" />
+                    &nbsp;
+                    <p:inputText id="query" value="#{pieChartController.query}"
+                                 required="true" requiredMessage="A query is required to display the pie chart!"/>
+                    <br /><br />
+
+                    <p:commandButton id="update" value="Display Sentiment Analysis" icon="fas fa-chart-bar" styleClass="rounded-button"
+                                     ajax="false" action="#{pieChartController.displayPieChart()}"/>
+                    &nbsp;
+                    <p:commandButton value="Clear" icon="fas fa-undo" styleClass="ui-button-outlined"
+                                     ajax="false" immediate="true"
+                                     actionListener="#{pieChartController.clear()}" >
+
+                        <p:resetInput target="PieChartForm"/>
+                    </p:commandButton>
+                </h:form>
+                
+            </div>
+            <br /><br />
+
+            <!--
+            ********************************************************************************************
+            PrimeFaces p:chart uses jqPlot (http://www.jqplot.com/) JavaScript library to create charts.
+
+            This JavaScript function barChartExtender() is created as an Extender and set in
+            StockChartController.java with
+
+            stockChart.setExtender("barChartExtender");
+
+            for use to style the chart using the jqPlot properties listed at
+            (http://www.jqplot.com/docs/files/jqplot-core-js.html)
+            ********************************************************************************************
+            -->
+            <script type="text/javascript">
+                function barChartExtender() {
+                    // this     ==> chart widget instance        
+                    // this.cfg ==> options        
+
+                    this.cfg.gridPadding = {
+                        top: 20, bottom: 50
+                    };
+                    this.cfg.seriesDefaults.rendererOptions = {
+                        barWidth: 25
+                    };
+                    this.cfg.legend = {
+                        show: true,
+                        placement: 'inside' // versus 'outside' of the chart
+                    };
+                    // Y Axis Styling
+                    this.cfg.axes.yaxis.labelOptions = {
+                        fontFamily: 'Arial, Helvetica, sans-serif',
+                        fontSize: '14pt',
+                        textColor: '#006400'  // Dark Green
+                    };
+                    this.cfg.axes.yaxis.tickOptions = {
+                        fontFamily: 'Arial, Helvetica, sans-serif',
+                        fontSize: '10pt',
+                        textColor: '#000000'  // Black
+                    };
+                    // X Axis Styling
+                    this.cfg.axes.xaxis.labelOptions = {
+                        fontFamily: 'Arial, Helvetica, sans-serif',
+                        fontSize: '14pt',
+                        textColor: '#006400'  // Dark Green
+                    };
+                    this.cfg.axes.xaxis.tickOptions = {
+                        fontFamily: 'Arial, Helvetica, sans-serif',
+                        fontSize: '8pt',
+                        angle: -30, // Slant the day label 30 degrees
+                        textColor: '#000000'  // Black
+                    };
+                }
+            </script>
+        </ui:define>
+
+    </ui:composition>
+    <!-- Do not enter tags after the composition line since they are ignored by JSF -->
+
+</html>
